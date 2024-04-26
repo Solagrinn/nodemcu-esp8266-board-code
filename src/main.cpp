@@ -114,12 +114,7 @@ void makePostRequest(String endpoint, String postData) {
 void setPins(){
 
   for (const PinData& pin : pinListMain) {  // Use a reference to avoid unnecessary copies
-    Serial.print("Pin ID: ");
-    Serial.println(pin.id);
-    Serial.print("Value: ");
-    Serial.println(pin.value);
-    Serial.print("Pin Name: ");
-    Serial.println(pin.pinName);
+    
 
     switch (pin.id.toInt())
     {
