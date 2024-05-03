@@ -134,8 +134,8 @@ void makePostRequest(String endpoint, String postData)
 void setPins()
 {
 
-  for (const PinData &pin : pinListMain)
-  { // Use a reference to avoid unnecessary copies
+  for (const PinData& pin : pinListMain) {  // Use a reference to avoid unnecessary copies
+    
 
     switch (pin.id.toInt())
     {
