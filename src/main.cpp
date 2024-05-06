@@ -41,6 +41,7 @@ void printPinList(const list<PinData> &pinList)
 }
 
 list<PinData> pinListMain;
+String dateMain; 
 
 // Function for GET request
 void makeGetRequest(String endpoint)
@@ -76,6 +77,7 @@ void makeGetRequest(String endpoint)
 
       // Extract pin data into the list
       JsonArray pinsArray = doc["boardList"].as<JsonArray>();
+      dateMain = doc["time"].as<String>();
 
       for (JsonObject pinObj : pinsArray)
       {
@@ -134,8 +136,8 @@ void makePostRequest(String endpoint, String postData)
 void setPins()
 {
 
-  for (const PinData& pin : pinListMain) {  // Use a reference to avoid unnecessary copies
-    
+  for (const PinData &pin : pinListMain)
+  { // Use a reference to avoid unnecessary copies
 
     switch (pin.id.toInt())
     {
@@ -151,21 +153,21 @@ void setPins()
     case 4:
       analogWrite(D3, pin.value.toInt());
       break;
-    case 5:
-      analogWrite(D4, pin.value.toInt());
-      break;
-    case 8:
-      analogWrite(D5, pin.value.toInt());
-      break;
+    // case 5:
+    // analogWrite(D4, pin.value.toInt());
+    // break;
+    // case 8:
+    // analogWrite(D5, pin.value.toInt());
+    // break;
     case 9:
       analogWrite(D6, pin.value.toInt());
       break;
-      // case 10:
-      //   analogWrite(D7, pin.value.toInt());
-      //   break;
-      // case 11:
-      //   analogWrite(D8, pin.value.toInt());
-      //   break;
+    case 10:
+      analogWrite(D7, pin.value.toInt());
+      break;
+    case 11:
+      analogWrite(D8, pin.value.toInt());
+      break;
 
     default:
       break;
@@ -173,30 +175,33 @@ void setPins()
   }
 }
 
-void displayPins() {
+void displayPins()
+{
   int counter = 0;
-  const int maxPinsPerColumn = 3;  
-  int lineSpacing = 10; // Example spacing between lines 
+  const int maxPinsPerColumn = 3;
+  int lineSpacing = 11; // Example spacing between lines
 
   display.clearDisplay();
 
-  for (const PinData &pin : pinListMain) {
-    int column = counter / maxPinsPerColumn;    // Determines left (0) or right (1) column
-    int line = counter % maxPinsPerColumn;     // Line number within the column
-    //FIX ABOVE
-    display.setCursor(column * 64, line * lineSpacing); // Calculate position
-    
-    string cstr = pin.pinName.c_str(); 
-    if (cstr.find("D") != string::npos) { 
-      display.println(pin.pinName + "-" + pin.value); 
+  for (const PinData &pin : pinListMain)
+  {
+    int column = counter % maxPinsPerColumn; // Determines left (0) or right (1) column
+    int line = counter / maxPinsPerColumn;   // Line number within the column
+    // FIX ABOVE
+    display.setCursor(column * 42, line * lineSpacing); // Calculate position
+
+    string cstr = pin.pinName.c_str();
+    if (cstr.find("D") != string::npos)
+    {
+      display.println(pin.pinName + "-" + pin.value);
+      counter++;
     }
-    
-    counter++;
   }
-
-  display.display(); 
+  display.setCursor(0, 32);
+  display.println(dateMain.substring(0,10));
+  display.println(dateMain.substring(11,19) + "  " + dateMain.substring(20, 24));
+  display.display();
 }
-
 
 void setup()
 {
@@ -216,7 +221,7 @@ void setup()
   display.setTextColor(WHITE);
   display.setCursor(0, 0);
   display.ssd1306_command(SSD1306_SETCONTRAST);
-  display.ssd1306_command(0x01); // For minimum brightness
+  display.ssd1306_command(1); // For minimum brightness
   display.println(ssid);
   display.println(password);
   display.println();
@@ -237,12 +242,12 @@ void setup()
   Serial.println("");
   Serial.println("WiFi connected");
 
-  // pinMode(D0, OUTPUT);
-  // pinMode(D1, OUTPUT);
+  pinMode(D0, OUTPUT);
+  pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
   pinMode(D3, OUTPUT);
-  pinMode(D4, OUTPUT);
-  pinMode(D5, OUTPUT);
+  // pinMode(D4, OUTPUT);
+  // pinMode(D5, OUTPUT);
   pinMode(D6, OUTPUT);
   pinMode(D7, OUTPUT);
   pinMode(D8, OUTPUT);
@@ -263,7 +268,7 @@ void loop()
 
   makeGetRequest("/getboardwithtime");
   displayPins();
-  delay(50);
+  
 
   setPins();
 }
