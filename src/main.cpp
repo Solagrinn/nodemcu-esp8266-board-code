@@ -41,7 +41,7 @@ void printPinList(const list<PinData> &pinList)
 }
 
 list<PinData> pinListMain;
-String dateMain; 
+String dateMain;
 
 // Function for GET request
 void makeGetRequest(String endpoint)
@@ -144,30 +144,30 @@ void setPins()
     case 1:
       analogWrite(D0, pin.value.toInt());
       break;
-    case 2:
-      analogWrite(D1, pin.value.toInt());
-      break;
-    case 3:
-      analogWrite(D2, pin.value.toInt());
-      break;
+    //case 2:
+    //  analogWrite(D1, pin.value.toInt());
+    //  break;
+    //case 3:
+    //  analogWrite(D2, pin.value.toInt());
+    //  break;
     case 4:
       analogWrite(D3, pin.value.toInt());
       break;
-    // case 5:
-    // analogWrite(D4, pin.value.toInt());
-    // break;
-    // case 8:
-    // analogWrite(D5, pin.value.toInt());
-    // break;
-    case 9:
-      analogWrite(D6, pin.value.toInt());
+    case 5:
+      analogWrite(D4, pin.value.toInt());
       break;
-    case 10:
-      analogWrite(D7, pin.value.toInt());
-      break;
-    case 11:
-      analogWrite(D8, pin.value.toInt());
-      break;
+    //case 8:
+    //  analogWrite(D5, pin.value.toInt());
+    //  break;
+    //case 9:
+    //  analogWrite(D6, pin.value.toInt());
+    //  break;
+    //case 10:
+    //  analogWrite(D7, pin.value.toInt());
+    //  break;
+    //case 11:
+    //  analogWrite(D8, pin.value.toInt());
+    //  break;
 
     default:
       break;
@@ -198,8 +198,8 @@ void displayPins()
     }
   }
   display.setCursor(0, 32);
-  display.println(dateMain.substring(0,10));
-  display.println(dateMain.substring(11,19) + "  " + dateMain.substring(20, 24));
+  display.println(dateMain.substring(0, 10));
+  display.println(dateMain.substring(11, 19) + "  " + dateMain.substring(20, 24));
   display.display();
 }
 
@@ -207,7 +207,7 @@ void setup()
 {
   Serial.begin(9600);
   delay(10);
-  Wire.begin(D4, D5);
+  Wire.begin(D2, D1);
 
   if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   { // Address 0x3C for 128x64
@@ -243,14 +243,14 @@ void setup()
   Serial.println("WiFi connected");
 
   pinMode(D0, OUTPUT);
-  pinMode(D1, OUTPUT);
-  pinMode(D2, OUTPUT);
+  // pinMode(D1, OUTPUT);
+  // pinMode(D2, OUTPUT);
   pinMode(D3, OUTPUT);
-  // pinMode(D4, OUTPUT);
+  pinMode(D4, OUTPUT);
   // pinMode(D5, OUTPUT);
-  pinMode(D6, OUTPUT);
-  pinMode(D7, OUTPUT);
-  pinMode(D8, OUTPUT);
+  // pinMode(D6, OUTPUT);
+  // pinMode(D7, OUTPUT);
+  // pinMode(D8, OUTPUT);
   pinMode(A0, INPUT);
 
   delay(500);
@@ -268,7 +268,6 @@ void loop()
 
   makeGetRequest("/getboardwithtime");
   displayPins();
-  
 
   setPins();
 }
